@@ -24,6 +24,7 @@ import me.wcy.music.constants.Keys;
 import me.wcy.music.executor.ControlPanel;
 import me.wcy.music.executor.NaviMenuExecutor;
 import me.wcy.music.executor.WeatherExecutor;
+import me.wcy.music.fragment.DanceMusicFragment;
 import me.wcy.music.fragment.LocalMusicFragment;
 import me.wcy.music.fragment.PlayFragment;
 import me.wcy.music.fragment.SheetListFragment;
@@ -66,6 +67,7 @@ public class MusicActivity extends BaseActivity implements View.OnClickListener,
     private LocalMusicFragment mLocalMusicFragment;
     private SheetListFragment mSheetListFragment;
     private SportMusicFragment mSportMusicFragment;
+    private DanceMusicFragment mDanceMusicFragment;
     private PlayFragment mPlayFragment;
 
     private ControlPanel controlPanel;          // 播放控制面板（界面底部，播放/停止、下一首、播放列表）
@@ -106,10 +108,12 @@ public class MusicActivity extends BaseActivity implements View.OnClickListener,
         mLocalMusicFragment = new LocalMusicFragment();
         mSheetListFragment = new SheetListFragment();
         mSportMusicFragment = new SportMusicFragment();
+        mDanceMusicFragment = new DanceMusicFragment();
         FragmentAdapter adapter = new FragmentAdapter(getSupportFragmentManager());
         adapter.addFragment(mLocalMusicFragment);
         adapter.addFragment(mSheetListFragment);
         adapter.addFragment(mSportMusicFragment);
+        adapter.addFragment(mDanceMusicFragment);
         mViewPager.setAdapter(adapter);
         tvLocalMusic.setSelected(true);
 
@@ -118,6 +122,7 @@ public class MusicActivity extends BaseActivity implements View.OnClickListener,
         tvLocalMusic.setOnClickListener(this);
         tvOnlineMusic.setOnClickListener(this);
         tvSportMusic.setOnClickListener(this);
+        tvDanceMusic.setOnClickListener(this);
         flPlayBar.setOnClickListener(this);
         mViewPager.addOnPageChangeListener(this);
         navigationView.setNavigationItemSelectedListener(this);
@@ -175,6 +180,12 @@ public class MusicActivity extends BaseActivity implements View.OnClickListener,
             case R.id.tv_online_music:
                 mViewPager.setCurrentItem(1);
                 break;
+            case R.id.tv_sport_music:
+                mViewPager.setCurrentItem(2);
+                break;
+            case R.id.tv_dance_music:
+                mViewPager.setCurrentItem(3);
+                break;
             case R.id.fl_play_bar:
                 showPlayingFragment();
                 break;
@@ -198,16 +209,25 @@ public class MusicActivity extends BaseActivity implements View.OnClickListener,
             tvLocalMusic.setSelected(true);
             tvOnlineMusic.setSelected(false);
             tvSportMusic.setSelected(false);
+            tvDanceMusic.setSelected(false);
         }
         else if (position == 1) {
             tvLocalMusic.setSelected(false);
             tvOnlineMusic.setSelected(true);
             tvSportMusic.setSelected(false);
+            tvDanceMusic.setSelected(false);
         }
         else if (position == 2) {
             tvLocalMusic.setSelected(false);
             tvOnlineMusic.setSelected(false);
             tvSportMusic.setSelected(true);
+            tvDanceMusic.setSelected(false);
+        }
+        else if (position == 3) {
+            tvLocalMusic.setSelected(false);
+            tvOnlineMusic.setSelected(false);
+            tvSportMusic.setSelected(false);
+            tvDanceMusic.setSelected(true);
         }
     }
 
@@ -265,6 +285,7 @@ public class MusicActivity extends BaseActivity implements View.OnClickListener,
         mLocalMusicFragment.onSaveInstanceState(outState);
         mSheetListFragment.onSaveInstanceState(outState);
         mSportMusicFragment.onSaveInstanceState(outState);
+        mDanceMusicFragment.onSaveInstanceState(outState);
     }
 
     // 从 Bundle 中恢复数据
@@ -274,7 +295,8 @@ public class MusicActivity extends BaseActivity implements View.OnClickListener,
             mViewPager.setCurrentItem(savedInstanceState.getInt(Keys.VIEW_PAGER_INDEX), false);
             mLocalMusicFragment.onRestoreInstanceState(savedInstanceState);
             mSheetListFragment.onRestoreInstanceState(savedInstanceState);
-            mSportMusicFragment.onSaveInstanceState(savedInstanceState);
+            mSportMusicFragment.onRestoreInstanceState(savedInstanceState);
+            mDanceMusicFragment.onRestoreInstanceState(savedInstanceState);
         });
     }
 

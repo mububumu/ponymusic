@@ -27,6 +27,8 @@ import me.wcy.music.executor.WeatherExecutor;
 import me.wcy.music.fragment.LocalMusicFragment;
 import me.wcy.music.fragment.PlayFragment;
 import me.wcy.music.fragment.SheetListFragment;
+import me.wcy.music.fragment.SportMusicFragment;
+import me.wcy.music.fragment.SportMusicFragment;
 import me.wcy.music.service.AudioPlayer;
 import me.wcy.music.service.QuitTimer;
 import me.wcy.music.utils.PermissionReq;
@@ -44,10 +46,16 @@ public class MusicActivity extends BaseActivity implements View.OnClickListener,
     private ImageView ivMenu;                // 菜单选项
     @Bind(R.id.iv_search)
     private ImageView ivSearch;              // 搜索选项
+
     @Bind(R.id.tv_local_music)
     private TextView tvLocalMusic;
     @Bind(R.id.tv_online_music)
     private TextView tvOnlineMusic;
+    @Bind(R.id.tv_sport_music)
+    private TextView tvSportMusic;
+    @Bind(R.id.tv_dance_music)
+    private TextView tvDanceMusic;
+
     @Bind(R.id.viewpager)
     private ViewPager mViewPager;
     @Bind(R.id.fl_play_bar)
@@ -57,6 +65,7 @@ public class MusicActivity extends BaseActivity implements View.OnClickListener,
 
     private LocalMusicFragment mLocalMusicFragment;
     private SheetListFragment mSheetListFragment;
+    private SportMusicFragment mSportMusicFragment;
     private PlayFragment mPlayFragment;
 
     private ControlPanel controlPanel;          // 播放控制面板（界面底部，播放/停止、下一首、播放列表）
@@ -96,9 +105,11 @@ public class MusicActivity extends BaseActivity implements View.OnClickListener,
         // setup view pager
         mLocalMusicFragment = new LocalMusicFragment();
         mSheetListFragment = new SheetListFragment();
+        mSportMusicFragment = new SportMusicFragment();
         FragmentAdapter adapter = new FragmentAdapter(getSupportFragmentManager());
         adapter.addFragment(mLocalMusicFragment);
         adapter.addFragment(mSheetListFragment);
+        adapter.addFragment(mSportMusicFragment);
         mViewPager.setAdapter(adapter);
         tvLocalMusic.setSelected(true);
 
@@ -106,6 +117,7 @@ public class MusicActivity extends BaseActivity implements View.OnClickListener,
         ivSearch.setOnClickListener(this);
         tvLocalMusic.setOnClickListener(this);
         tvOnlineMusic.setOnClickListener(this);
+        tvSportMusic.setOnClickListener(this);
         flPlayBar.setOnClickListener(this);
         mViewPager.addOnPageChangeListener(this);
         navigationView.setNavigationItemSelectedListener(this);
@@ -185,10 +197,17 @@ public class MusicActivity extends BaseActivity implements View.OnClickListener,
         if (position == 0) {
             tvLocalMusic.setSelected(true);
             tvOnlineMusic.setSelected(false);
+            tvSportMusic.setSelected(false);
         }
-        else {
+        else if (position == 1) {
             tvLocalMusic.setSelected(false);
             tvOnlineMusic.setSelected(true);
+            tvSportMusic.setSelected(false);
+        }
+        else if (position == 2) {
+            tvLocalMusic.setSelected(false);
+            tvOnlineMusic.setSelected(false);
+            tvSportMusic.setSelected(true);
         }
     }
 
@@ -245,6 +264,7 @@ public class MusicActivity extends BaseActivity implements View.OnClickListener,
         outState.putInt(Keys.VIEW_PAGER_INDEX, mViewPager.getCurrentItem());
         mLocalMusicFragment.onSaveInstanceState(outState);
         mSheetListFragment.onSaveInstanceState(outState);
+        mSportMusicFragment.onSaveInstanceState(outState);
     }
 
     // 从 Bundle 中恢复数据
@@ -254,6 +274,7 @@ public class MusicActivity extends BaseActivity implements View.OnClickListener,
             mViewPager.setCurrentItem(savedInstanceState.getInt(Keys.VIEW_PAGER_INDEX), false);
             mLocalMusicFragment.onRestoreInstanceState(savedInstanceState);
             mSheetListFragment.onRestoreInstanceState(savedInstanceState);
+            mSportMusicFragment.onSaveInstanceState(savedInstanceState);
         });
     }
 
